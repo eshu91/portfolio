@@ -1,0 +1,30 @@
+import * as THREE from 'three'
+import { skills, asteroidBelt } from '../../data/skills'
+import SkillPlanet from './SkillPlanet'
+import AsteroidBelt from './AsteroidBelt'
+
+/*
+ * Skills = Solar System, centered on the SNova star (the sun of this system).
+ * Entirely data-driven: appending a planet to data/skills.js adds its orbit
+ * ring, planet, moons and chain arcs automatically.
+ * SCALE compresses the semantic orbit radii (10–38) into camera frame.
+ */
+const SCALE = 0.55
+
+export default function SolarSystem() {
+  return (
+    <group position={[0, 0, 0]}>
+      {skills.map((skill) => (
+        <group key={skill.id}>
+          {/* orbit path ring */}
+          <mesh rotation-x={-Math.PI / 2}>
+            <ringGeometry args={[skill.orbitRadius * SCALE - 0.03, skill.orbitRadius * SCALE + 0.03, 128]} />
+            <meshBasicMaterial color="#22D3EE" transparent opacity={0.13} side={THREE.DoubleSide} depthWrite={false} />
+          </mesh>
+          <SkillPlanet skill={skill} scale={SCALE} />
+        </group>
+      ))}
+      <AsteroidBelt radius={asteroidBelt.radius} spread={asteroidBelt.spread} scale={SCALE} />
+    </group>
+  )
+}
