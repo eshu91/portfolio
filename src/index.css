@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { background: #030f18; color: #ffffff; }
+body { font-family: 'Space Grotesk', system-ui, sans-serif; overflow-x: hidden; }
+::selection { background: #22D3EE; color: #030f18; }
+
+/* the single shared WebGL canvas sits behind all DOM content */
+.webgl-canvas { position: fixed !important; inset: 0; z-index: 0; pointer-events: none; }
+.dom-layer { position: relative; z-index: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
