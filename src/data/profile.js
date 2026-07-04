@@ -1,17 +1,18 @@
-/** Identity & branding — edit here, never in components. */
+/** Identity & branding - edit here, never in components. */
 export const profile = {
-  name: 'Ishwari Raut',
-  alias: 'SNova',
-  github: 'eshu91',
-  location: 'Itahari, Nepal 🇳🇵',
-  email: 'ishwariraut133@gmail.com',
-  tagline: 'Building real things across the stack — from Kathmandu to the cloud',
+  name: "Ishwari Raut",
+  alias: "SNova",
+  github: "eshu91",
+  location: "Itahari, Nepal 🇳🇵",
+  email: "ishwariraut133@gmail.com",
+  tagline:
+    "Building real things across the stack - from Kathmandu to the cloud",
   roles: [
-    'Full-Stack Engineer',
-    'Cloud Explorer ☁️',
-    'Flutter Builder 📱',
-    'AI Automation Architect 🤖',
-    'CS Educator 👩‍🏫',
+    "Full-Stack Engineer",
+    "Cloud Explorer ☁️",
+    "Flutter Builder 📱",
+    "AI Automation Architect 🤖",
+    "CS Educator 👩‍🏫",
   ],
   aboutClass: `class SNova:
     def __init__(self):
@@ -27,4 +28,4 @@ export const profile = {
 
     def fun_fact(self):
         return "I automate real things with Google Sheets before writing a single line of code ⚡"`,
-}
+};
