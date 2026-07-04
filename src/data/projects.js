@@ -79,8 +79,8 @@ export const projects = [
     locked: false,
   },
   {
-    id: "interview-coach",
-    title: "IT Interview Coach",
+    id: "token-watch",
+    title: "Token Watch Chromium Extension",
     blurb: "Chrome extension powered by the Anthropic API.",
     tech: ["Chrome Extension", "Anthropic API"],
     github: "",
