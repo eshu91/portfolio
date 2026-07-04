@@ -17,7 +17,7 @@ export const skills = [
     label: "PHP",
     color: "#67E8F9",
     orbitRadius: 10,
-    size: 1.2,
+    size: 0.7,
     speed: 0.22,
     level: "Advanced",
     moons: ["Laravel"],
