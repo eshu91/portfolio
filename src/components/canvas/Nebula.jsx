@@ -1,10 +1,10 @@
-import { useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
-import * as THREE from 'three'
-import { useStore } from '../../store/useStore'
+import { useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import { useStore } from "../../store/useStore";
 
 /*
- * Nebula backdrop — fbm (fractal Brownian motion) over 2D simplex noise,
+ * Nebula backdrop - fbm (fractal Brownian motion) over 2D simplex noise,
  * drifting slowly, colored deep-space → #0e5268 → #67E8F9.
  * Rendered on a giant plane far behind everything, additive + very low opacity.
  */
@@ -15,7 +15,7 @@ const vertex = /* glsl */ `
     vUv = uv;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
-`
+`;
 
 const fragment = /* glsl */ `
   uniform float uTime;
@@ -77,16 +77,16 @@ const fragment = /* glsl */ `
 
     gl_FragColor = vec4(col, cloud * edge * 0.22); // very low opacity
   }
-`
+`;
 
 export default function Nebula() {
-  const mat = useRef()
-  const reducedMotion = useStore((s) => s.reducedMotion)
+  const mat = useRef();
+  const reducedMotion = useStore((s) => s.reducedMotion);
 
   useFrame((state) => {
-    if (reducedMotion) return
-    if (mat.current) mat.current.uniforms.uTime.value = state.clock.elapsedTime
-  })
+    if (reducedMotion) return;
+    if (mat.current) mat.current.uniforms.uTime.value = state.clock.elapsedTime;
+  });
 
   return (
     <mesh position={[0, 0, -90]} scale={[380, 220, 1]}>
@@ -101,5 +101,5 @@ export default function Nebula() {
         uniforms={{ uTime: { value: 0 } }}
       />
     </mesh>
-  )
+  );
 }
