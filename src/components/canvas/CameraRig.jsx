@@ -9,25 +9,23 @@ import { skillPositions } from './skillRegistry'
 gsap.registerPlugin(ScrollTrigger)
 
 /*
- * Scroll-driven camera — v2.
- * A GSAP ScrollTrigger timeline (scrubbed over the whole page) tweens two
- * Vector3s — desired position + look target — through the sector WAYPOINTS.
- * useFrame damps the real camera toward them and layers pointer parallax
- * on top, keeping motion silky at any scroll speed.
- *
- * Clicking a skill planet overrides the scroll rig: the camera docks beside
- * the planet's live position (from skillRegistry) until released.
- *
- * Adding a sector in phase 3 = adding a WAYPOINTS row + one timeline leg.
+ * Scroll-driven camera — v3, full flight path:
+ * Launch → Observatory → Solar System → Station Corridor (pan past the
+ * deep-space stations) → Trajectory Map (dive below the solar plane) →
+ * Transmission (return home to the star + satellite).
+ * A GSAP ScrollTrigger timeline scrubbed over the whole page tweens the
+ * desired position/look Vector3s; useFrame damps the real camera toward
+ * them with pointer parallax on top. Clicking a skill planet overrides
+ * the rig and docks beside it until released.
  */
 export const WAYPOINTS = {
-  hero:   { position: [0, 0.5, 12],  lookAt: [0, 0.4, 0] },
-  about:  { position: [7, 2.5, 9.5], lookAt: [1.5, 0.6, 0] },
-  skills: { position: [0, 22, 30],   lookAt: [0, 0, 0] },
-  // phase 3:
-  // projects: { position: [30, 4, 10],  lookAt: [34, 2, 0] },
-  // roadmap:  { position: [0, -14, 18], lookAt: [0, -16, 0] },
-  // contact:  { position: [0, 0.5, 7],  lookAt: [0, 0.4, 0] },
+  hero:        { position: [0, 0.5, 12],   lookAt: [0, 0.4, 0] },
+  about:       { position: [7, 2.5, 9.5],  lookAt: [1.5, 0.6, 0] },
+  skills:      { position: [0, 22, 30],    lookAt: [0, 0, 0] },
+  projectsIn:  { position: [24, 2.5, 13],  lookAt: [34, 0, 0] },
+  projectsPan: { position: [72, 2.5, 13],  lookAt: [82, 0, 0] },
+  roadmap:     { position: [0, -40, 22],   lookAt: [0, -43, 0] },
+  contact:     { position: [0, 0.8, 8.5],  lookAt: [0.8, 0.6, 0] },
 }
 
 export default function CameraRig() {
@@ -53,9 +51,13 @@ export default function CameraRig() {
       tl.to(pos.current, { x: wp.position[0], y: wp.position[1], z: wp.position[2], duration })
       tl.to(look.current, { x: wp.lookAt[0], y: wp.lookAt[1], z: wp.lookAt[2], duration }, '<')
     }
-    leg(WAYPOINTS.about, 1)    // Launch → Observatory
-    leg(WAYPOINTS.skills, 1.2) // Observatory → Solar System (flying up & over)
-    tl.to({}, { duration: 0.8 }) // hold at the system while the user explores
+    leg(WAYPOINTS.about, 1)        // Launch → Observatory
+    leg(WAYPOINTS.skills, 1.2)     // up & over the solar system
+    tl.to({}, { duration: 0.6 })   // hold — explore the planets
+    leg(WAYPOINTS.projectsIn, 1.2) // fly out to the station corridor
+    leg(WAYPOINTS.projectsPan, 1.5)// pan past every station
+    leg(WAYPOINTS.roadmap, 1.3)    // dive to the trajectory constellation
+    leg(WAYPOINTS.contact, 1.1)    // return home for transmission
     ScrollTrigger.refresh()
     return () => {
       tl.scrollTrigger?.kill()
@@ -74,7 +76,6 @@ export default function CameraRig() {
     const planetPos = focused ? skillPositions.get(focused) : null
 
     if (planetPos) {
-      // dock beside the (still-parked) planet
       dockPos.current.set(planetPos.x + 2.5, planetPos.y + 1.8, planetPos.z + 4)
       camera.position.x = THREE.MathUtils.damp(camera.position.x, dockPos.current.x, 2.5, delta)
       camera.position.y = THREE.MathUtils.damp(camera.position.y, dockPos.current.y, 2.5, delta)
@@ -86,7 +87,6 @@ export default function CameraRig() {
       return
     }
 
-    // scroll waypoint + idle drift + pointer parallax
     const t = state.clock.elapsedTime
     const px = pos.current.x + state.pointer.x * 1.1 + Math.sin(t * 0.1) * 0.35
     const py = pos.current.y + state.pointer.y * 0.7 + Math.cos(t * 0.13) * 0.25

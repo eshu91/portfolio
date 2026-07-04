@@ -5,14 +5,17 @@ import Starfield from './Starfield'
 import Nebula from './Nebula'
 import SNovaStar from './SNovaStar'
 import SolarSystem from './SolarSystem'
+import ProjectStations from './ProjectStations'
+import TrajectoryMap from './TrajectoryMap'
+import Satellite from './Satellite'
 import CameraRig from './CameraRig'
 import Effects from './Effects'
 import { useStore } from '../../store/useStore'
 
 /*
  * THE single shared full-viewport canvas — fixed behind the DOM.
- * eventSource points at the app root so planet hover/click raycasting works
- * even though DOM sections scroll on top (canvas itself is pointer-events:none).
+ * Regions: SNova + Solar System at origin · Station Corridor x 34→87 ·
+ * Trajectory constellation y ≈ −43 · Satellite beside the star.
  */
 export default function Scene({ eventSource }) {
   const quality = useStore((s) => s.quality)
@@ -36,6 +39,9 @@ export default function Scene({ eventSource }) {
         <Starfield />
         <SNovaStar />
         <SolarSystem />
+        <ProjectStations />
+        <TrajectoryMap />
+        <Satellite />
         <CameraRig />
         <Effects />
       </Suspense>

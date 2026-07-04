@@ -60,4 +60,4 @@ Drop `resume.pdf` into `public/` to activate the résumé button.
 ## Roadmap of the build itself
 - ✅ Phase 1 — scaffold, shared canvas, starfield, nebula, SNova hero
 - ✅ Phase 2 — Observatory HUD, Solar System skills (orbits, chain arcs, hover/focus), Lenis + GSAP camera scrub, scroll-velocity chromatic aberration
-- ⏳ Phase 3 — Project stations, Trajectory Map, Transmission form, cursor/comet micro-interactions
+- ✅ Phase 3 — Deep Space Stations + Lab 🧪 filter, Trajectory Map constellation, Transmission form + satellite, cursor trail / magnetic buttons / scroll comet
