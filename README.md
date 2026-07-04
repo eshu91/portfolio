@@ -41,6 +41,9 @@ Open `src/data/projects.js`, append one object:
 ```
 Cards, station meshes and the Lab 🧪 filter all pick it up automatically. Adding a skill planet works the same way in `skills.js` (schema commented at the top of each file).
 
+## Planet textures
+Surface maps live in `public/textures/` (Solar System Scope planet maps, [CC BY 4.0](https://www.solarsystemscope.com/textures/) — attribution required if you redistribute). Each planet's map is set per-entry in `src/data/skills.js` via the `texture` field, so a new skill planet just points at any equirectangular map you drop into `public/textures/`.
+
 ## Palette (strict — Tailwind tokens)
 `space-deep #030f18` · `space-mid #083344` · `space-grad #0e5268` · `plasma #67E8F9` · `plasma-mid #22D3EE` · `stargold #F8D866`
 

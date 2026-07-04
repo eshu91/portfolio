@@ -1,22 +1,26 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Html, QuadraticBezierLine } from '@react-three/drei'
+import { Html, QuadraticBezierLine, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { useStore } from '../../store/useStore'
 import { skillPositions } from './skillRegistry'
 
 /*
  * One tech-ecosystem planet, fully prop-driven from data/skills.js.
- *  - orbits the SNova star; hovering PAUSES the orbit and scales it up
- *  - moons (frameworks) circle the planet; QuadraticBezier arcs draw the
- *    dependency chain planet → moon₁ → moon₂ … in #22D3EE
- *  - hover/focus shows an Html HUD card (name, level, chain)
- *  - click focuses the camera (handled by CameraRig via skillRegistry)
+ * v2: real planet surface textures (Solar System Scope maps, CC BY 4.0)
+ * loaded via drei useTexture from skill.texture. The texture doubles as an
+ * emissiveMap at low intensity so night sides stay readable in deep space,
+ * boosted on hover. Planets spin on a tilted axis; moons share a real
+ * lunar surface map.
+ *  - hover PAUSES the orbit + scales the planet up
+ *  - QuadraticBezier arcs draw the dependency chain planet → moon₁ → moon₂…
+ *  - click focuses the camera (via skillRegistry → CameraRig)
  */
 export default function SkillPlanet({ skill, scale = 1 }) {
-  const { id, label, color, orbitRadius, size, speed, level, moons } = skill
+  const { id, label, color, orbitRadius, size, speed, level, moons, texture } = skill
   const pivot = useRef()
-  const planet = useRef()
+  const planet = useRef()      // scale group
+  const surface = useRef()     // spinning textured sphere
   const moonGroup = useRef()
   const worldPos = useRef(new THREE.Vector3())
 
@@ -30,6 +34,10 @@ export default function SkillPlanet({ skill, scale = 1 }) {
   const focused = focusedSkill === id
   const r = orbitRadius * scale
   const angle = useRef(Math.random() * Math.PI * 2)
+
+  const [surfaceMap, moonMap] = useTexture([texture, '/textures/moon.png'])
+  surfaceMap.colorSpace = THREE.SRGBColorSpace
+  moonMap.colorSpace = THREE.SRGBColorSpace
 
   // moons laid out on a widening spiral so chain arcs never overlap
   const moonData = useMemo(
@@ -53,35 +61,55 @@ export default function SkillPlanet({ skill, scale = 1 }) {
     const s = THREE.MathUtils.damp(planet.current.scale.x, targetScale, 6, delta)
     planet.current.scale.setScalar(s)
 
-    if (!reducedMotion && moonGroup.current) moonGroup.current.rotation.y += delta * 0.2
+    if (!reducedMotion) {
+      if (surface.current) surface.current.rotation.y += delta * 0.18 // day/night spin
+      if (moonGroup.current) moonGroup.current.rotation.y += delta * 0.2
+    }
   })
 
   return (
     <group ref={pivot}>
       <group ref={planet}>
-        <mesh
-          onPointerOver={(e) => {
-            e.stopPropagation()
-            setHoveredSkill(id)
-            document.body.style.cursor = 'pointer'
-          }}
-          onPointerOut={() => {
-            setHoveredSkill(null)
-            document.body.style.cursor = 'auto'
-          }}
-          onClick={(e) => {
-            e.stopPropagation()
-            setFocusedSkill(focused ? null : id) // click again to release
-          }}
-        >
-          <sphereGeometry args={[size, 32, 32]} />
-          <meshStandardMaterial
-            color={color}
-            emissive={new THREE.Color(color)}
-            emissiveIntensity={hovered || focused ? 0.6 : 0.22}
-            roughness={0.55}
-          />
-        </mesh>
+        {/* tilted axis, like the real thing */}
+        <group rotation={[0, 0, 0.22]}>
+          <mesh
+            ref={surface}
+            onPointerOver={(e) => {
+              e.stopPropagation()
+              setHoveredSkill(id)
+              document.body.style.cursor = 'pointer'
+            }}
+            onPointerOut={() => {
+              setHoveredSkill(null)
+              document.body.style.cursor = 'auto'
+            }}
+            onClick={(e) => {
+              e.stopPropagation()
+              setFocusedSkill(focused ? null : id) // click again to release
+            }}
+          >
+            <sphereGeometry args={[size, 48, 48]} />
+            <meshStandardMaterial
+              map={surfaceMap}
+              emissiveMap={surfaceMap}
+              emissive={new THREE.Color('#ffffff')}
+              emissiveIntensity={hovered || focused ? 0.55 : 0.3}
+              roughness={0.9}
+              metalness={0}
+            />
+          </mesh>
+          {/* thin atmosphere rim in the ecosystem's accent color */}
+          <mesh scale={1.04}>
+            <sphereGeometry args={[size, 32, 32]} />
+            <meshBasicMaterial
+              color={color}
+              transparent
+              opacity={hovered || focused ? 0.14 : 0.06}
+              side={THREE.BackSide}
+              depthWrite={false}
+            />
+          </mesh>
+        </group>
 
         {/* moons + dependency-chain arcs (rotate together) */}
         <group ref={moonGroup}>
@@ -104,12 +132,13 @@ export default function SkillPlanet({ skill, scale = 1 }) {
                   opacity={hovered || focused ? 0.9 : 0.35}
                 />
                 <mesh position={m.pos}>
-                  <sphereGeometry args={[0.16, 16, 16]} />
+                  <sphereGeometry args={[0.16, 24, 24]} />
                   <meshStandardMaterial
-                    color="#cffafe"
-                    emissive={new THREE.Color('#67E8F9')}
-                    emissiveIntensity={0.4}
-                    roughness={0.4}
+                    map={moonMap}
+                    emissiveMap={moonMap}
+                    emissive={new THREE.Color('#ffffff')}
+                    emissiveIntensity={0.35}
+                    roughness={0.95}
                   />
                 </mesh>
               </group>

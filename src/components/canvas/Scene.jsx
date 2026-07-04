@@ -25,7 +25,8 @@ export default function Scene({ eventSource }) {
       eventSource={eventSource}
       eventPrefix="client"
       dpr={quality === 'high' ? [1, 2] : [1, 1.5]}
-      camera={{ position: [0, 0.5, 12], fov: 50, near: 0.1, far: 400 }}
+      // camera={{ position: [0, 0.5, 12], fov: 50, near: 0.1, far: 400 }}
+      camera={{ position: [0, 16, 26], fov: 50, near: 0.1, far: 400 }}
       gl={{ antialias: false, powerPreference: 'high-performance' }}
       onCreated={({ gl, scene }) => {
         gl.setClearColor('#030f18')
