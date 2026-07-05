@@ -8,7 +8,9 @@ import {
   Trail,
 } from "@react-three/drei";
 import * as THREE from "three";
+import { useEffect } from "react";
 import { useStore } from "../../store/useStore";
+import { THEMES } from "../../lib/themes";
 
 /*
  * Hero centerpiece - the SNova pulsar. v2 fixes:
@@ -28,14 +30,14 @@ const haloVertex = /* glsl */ `
 
 const haloFragment = /* glsl */ `
   uniform float uTime;
+  uniform vec3 uCol;
+  uniform vec3 uHot;
   varying vec2 vUv;
   void main() {
     float d = distance(vUv, vec2(0.5)) * 2.0;          // 0 center → 1 edge
     float pulse = 1.0 + 0.08 * sin(uTime * 1.6);
     float a = pow(max(0.0, 1.0 - d / pulse), 2.6);     // soft radial falloff
-    vec3 plasma = vec3(0.404, 0.910, 0.976);           // #67E8F9
-    vec3 hot    = vec3(0.812, 0.980, 0.996);           // near-white cyan core
-    vec3 col = mix(plasma, hot, a);
+    vec3 col = mix(uCol, uHot, a);
     gl_FragColor = vec4(col, a * 0.85);
   }
 `;
@@ -43,6 +45,12 @@ const haloFragment = /* glsl */ `
 function Halo({ size = 5.5 }) {
   const mat = useRef();
   const reducedMotion = useStore((s) => s.reducedMotion);
+  const theme = useStore((s) => THEMES[s.theme]);
+  useEffect(() => {
+    if (!mat.current) return;
+    mat.current.uniforms.uCol.value.set(theme.accent);
+    mat.current.uniforms.uHot.value.set(theme.hot);
+  }, [theme]);
   useFrame((state) => {
     if (!reducedMotion && mat.current)
       mat.current.uniforms.uTime.value = state.clock.elapsedTime;
@@ -58,7 +66,11 @@ function Halo({ size = 5.5 }) {
           transparent
           depthWrite={false}
           blending={THREE.AdditiveBlending}
-          uniforms={{ uTime: { value: 0 } }}
+          uniforms={{
+            uTime: { value: 0 },
+            uCol: { value: new THREE.Color("#67E8F9") },
+            uHot: { value: new THREE.Color("#e0fbff") },
+          }}
         />
       </mesh>
     </Billboard>
@@ -66,6 +78,7 @@ function Halo({ size = 5.5 }) {
 }
 
 export default function SNovaStar() {
+  const theme = useStore((s) => THEMES[s.theme]);
   const core = useRef();
   const ring = useRef();
   const comet = useRef();
@@ -106,8 +119,8 @@ export default function SNovaStar() {
         <mesh ref={core}>
           <sphereGeometry args={[0.8, 64, 64]} />
           <MeshDistortMaterial
-            color="#22D3EE"
-            emissive={new THREE.Color("#67E8F9")}
+            color={theme.accent2}
+            emissive={new THREE.Color(theme.accent)}
             emissiveIntensity={2.2}
             toneMapped={false}
             distort={reducedMotion ? 0 : 0.28}
@@ -119,7 +132,7 @@ export default function SNovaStar() {
         {/* hot inner core - the bright heart of the star */}
         <mesh>
           <sphereGeometry args={[0.42, 32, 32]} />
-          <meshBasicMaterial color="#e0fbff" toneMapped={false} />
+          <meshBasicMaterial color={theme.hot} toneMapped={false} />
         </mesh>
 
         {/* energy ring - thinner, half the old radius */}
@@ -127,8 +140,8 @@ export default function SNovaStar() {
           <mesh ref={ring}>
             <torusGeometry args={[2.8, 0.02, 16, 200]} />
             <meshStandardMaterial
-              color="#22D3EE"
-              emissive={new THREE.Color("#22D3EE")}
+              color={theme.accent2}
+              emissive={new THREE.Color(theme.accent2)}
               emissiveIntensity={1.4}
               toneMapped={false}
             />
@@ -140,12 +153,12 @@ export default function SNovaStar() {
           <Trail
             width={0.9}
             length={4}
-            color="#F8D866"
+            color={theme.gold}
             attenuation={(w) => w * w}
           >
             <mesh ref={comet}>
               <sphereGeometry args={[0.07, 16, 16]} />
-              <meshBasicMaterial color="#F8D866" toneMapped={false} />
+              <meshBasicMaterial color={theme.gold} toneMapped={false} />
             </mesh>
           </Trail>
         )}
@@ -155,9 +168,14 @@ export default function SNovaStar() {
           scale={5.5}
           size={2.5}
           speed={reducedMotion ? 0 : 0.3}
-          color="#F8D866"
+          color={theme.gold}
         />
-        <pointLight color="#67E8F9" intensity={10} distance={48} decay={2} />
+        <pointLight
+          color={theme.accent}
+          intensity={10}
+          distance={48}
+          decay={2}
+        />
       </group>
     </Float>
   );

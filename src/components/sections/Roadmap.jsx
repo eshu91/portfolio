@@ -1,23 +1,25 @@
 import { roadmap } from "../../data/roadmap";
 import { useStore } from "../../store/useStore";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { THEMES } from "../../lib/themes";
 
 /*
  * Trajectory Map sector. Desktop + motion: transparent runway - the 3D
  * constellation below the solar plane is the content. Reduced-motion /
  * mobile: the same roadmap.js data as a vertical fallback timeline.
  */
-function statusMeta(status) {
-  if (status === "done") return { icon: "✓", color: "#67E8F9" };
-  if (status === "current") return { icon: "⟳", color: "#F8D866" };
-  return { icon: "◈", color: "#0e5268" };
+function statusMeta(theme, status) {
+  if (status === "done") return { icon: "✓", color: theme.accent };
+  if (status === "current") return { icon: "⟳", color: theme.gold };
+  return { icon: "◈", color: theme.grad };
 }
 
 function FallbackTimeline() {
+  const theme = useStore((s) => THEMES[s.theme]);
   return (
     <ol className="mx-auto mt-10 max-w-md space-y-5 border-l border-space-grad pl-6">
       {roadmap.map((m) => {
-        const s = statusMeta(m.status);
+        const s = statusMeta(theme, m.status);
         return (
           <li key={`${m.year}-${m.title}`} className="relative">
             <span

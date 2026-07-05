@@ -53,7 +53,7 @@ export default function SoundToggle() {
       onClick={onToggle}
       aria-label={soundOn ? 'Mute sound' : 'Unmute sound'}
       title={soundOn ? 'Sound: on' : 'Sound: off'}
-      className="fixed bottom-5 right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-space-grad bg-space-deep/80 text-base backdrop-blur transition hover:border-plasma-mid hover:shadow-[0_0_18px_rgba(34,211,238,0.4)]"
+      className="fixed bottom-5 right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-space-grad bg-space-deep/80 text-base backdrop-blur transition hover:border-plasma-mid hover:shadow-[0_0_18px_rgb(var(--accent2)/0.4)]"
     >
       {soundOn ? '🔊' : '🔇'}
     </button>

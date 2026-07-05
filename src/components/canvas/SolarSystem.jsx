@@ -3,6 +3,8 @@ import { useTexture } from '@react-three/drei'
 import { skills, asteroidBelts } from '../../data/skills'
 import SkillPlanet from './SkillPlanet'
 import AsteroidBelt from './AsteroidBelt'
+import { useStore } from '../../store/useStore'
+import { THEMES } from '../../lib/themes'
 
 /*
  * Skills = Solar System, centered on the SNova star (the sun of this system).
@@ -10,13 +12,14 @@ import AsteroidBelt from './AsteroidBelt'
  * ring, planet, moons and chain arcs automatically.
  * SCALE compresses the semantic orbit radii (10–38) into camera frame.
  */
-const SCALE = 0.65
+const SCALE = 0.55
 
 // preload every surface map (+ shared moon map) during the loader screen
 skills.forEach((s) => useTexture.preload(s.texture))
 useTexture.preload('/textures/moon.png')
 
 export default function SolarSystem() {
+  const theme = useStore((s) => THEMES[s.theme])
   return (
     <group position={[0, 0, 0]}>
       {skills.map((skill) => (
@@ -24,7 +27,7 @@ export default function SolarSystem() {
           {/* orbit path ring */}
           <mesh rotation-x={-Math.PI / 2}>
             <ringGeometry args={[skill.orbitRadius * SCALE - 0.03, skill.orbitRadius * SCALE + 0.03, 128]} />
-            <meshBasicMaterial color="#22D3EE" transparent opacity={0.13} side={THREE.DoubleSide} depthWrite={false} />
+            <meshBasicMaterial color={theme.accent2} transparent opacity={0.13} side={THREE.DoubleSide} depthWrite={false} />
           </mesh>
           <SkillPlanet skill={skill} scale={SCALE} />
         </group>

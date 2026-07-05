@@ -19,15 +19,13 @@ gsap.registerPlugin(ScrollTrigger);
  * the rig and docks beside it until released.
  */
 export const WAYPOINTS = {
-  // hero:        { position: [0, 0.5, 12],   lookAt: [0, 0.4, 0] },
-  hero: { position: [0, 16, 26], lookAt: [0, 0, 0] },
+  hero: { position: [0, 0.5, 12], lookAt: [0, 0.4, 0] },
   about: { position: [7, 2.5, 9.5], lookAt: [1.5, 0.6, 0] },
   skills: { position: [0, 22, 30], lookAt: [0, 0, 0] },
   projectsIn: { position: [24, 2.5, 13], lookAt: [34, 0, 0] },
   projectsPan: { position: [72, 2.5, 13], lookAt: [82, 0, 0] },
   roadmap: { position: [0, -40, 22], lookAt: [0, -43, 0] },
-  // contact:     { position: [0, 0.8, 8.5],  lookAt: [0.8, 0.6, 0] },
-  contact: { position: [0, 7, 11], lookAt: [0.5, 0, 0] },
+  contact: { position: [0, 0.8, 8.5], lookAt: [0.8, 0.6, 0] },
 };
 
 export default function CameraRig() {

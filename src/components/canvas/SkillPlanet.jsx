@@ -5,6 +5,7 @@ import * as THREE from 'three'
 import { useStore } from '../../store/useStore'
 import { skillPositions } from './skillRegistry'
 import { sfx } from '../../lib/soundEngine'
+import { THEMES, mapColor } from '../../lib/themes'
 
 /*
  * One tech-ecosystem planet, fully prop-driven from data/skills.js.
@@ -30,6 +31,7 @@ export default function SkillPlanet({ skill, scale = 1 }) {
   const setHoveredSkill = useStore((s) => s.setHoveredSkill)
   const setFocusedSkill = useStore((s) => s.setFocusedSkill)
   const reducedMotion = useStore((s) => s.reducedMotion)
+  const theme = useStore((s) => THEMES[s.theme])
 
   const hovered = hoveredSkill === id
   const focused = focusedSkill === id
@@ -105,7 +107,7 @@ export default function SkillPlanet({ skill, scale = 1 }) {
           <mesh scale={1.04}>
             <sphereGeometry args={[size, 32, 32]} />
             <meshBasicMaterial
-              color={color}
+              color={mapColor(theme, color)}
               transparent
               opacity={hovered || focused ? 0.14 : 0.06}
               side={THREE.BackSide}
@@ -129,7 +131,7 @@ export default function SkillPlanet({ skill, scale = 1 }) {
                   start={prev}
                   end={m.pos}
                   mid={mid}
-                  color="#22D3EE"
+                  color={theme.accent2}
                   lineWidth={1}
                   transparent
                   opacity={hovered || focused ? 0.9 : 0.35}
@@ -152,7 +154,7 @@ export default function SkillPlanet({ skill, scale = 1 }) {
         {/* HUD label card */}
         {(hovered || focused) && (
           <Html center position={[0, size * 2.6, 0]} distanceFactor={16} style={{ pointerEvents: 'none' }}>
-            <div className="w-56 rounded-lg border border-plasma-mid/60 bg-space-deep/90 px-4 py-3 font-code text-left shadow-[0_0_24px_rgba(34,211,238,0.35)] backdrop-blur">
+            <div className="w-56 rounded-lg border border-plasma-mid/60 bg-space-deep/90 px-4 py-3 font-code text-left shadow-[0_0_24px_rgb(var(--accent2)/0.35)] backdrop-blur">
               <p className="text-plasma text-sm font-medium">{label}</p>
               <p className="text-stargold text-[11px] mt-0.5">{level}</p>
               <p className="text-white/75 text-[11px] mt-2 leading-relaxed">

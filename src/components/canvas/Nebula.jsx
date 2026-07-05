@@ -1,7 +1,8 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useStore } from "../../store/useStore";
+import { THEMES } from "../../lib/themes";
 
 /*
  * Nebula backdrop - fbm (fractal Brownian motion) over 2D simplex noise,
@@ -19,6 +20,9 @@ const vertex = /* glsl */ `
 
 const fragment = /* glsl */ `
   uniform float uTime;
+  uniform vec3 uDeep;
+  uniform vec3 uMid;
+  uniform vec3 uAccent;
   varying vec2 vUv;
 
   // ---- 2D simplex noise (Ashima / IQ standard implementation) ----
@@ -65,11 +69,8 @@ const fragment = /* glsl */ `
     float n2 = fbm(p * 1.7 - vec2(uTime * 0.01, 0.0) + n1);
     float cloud = smoothstep(-0.2, 0.9, n1 + n2 * 0.5);
 
-    vec3 deep   = vec3(0.012, 0.059, 0.094);  // #030f18
-    vec3 mid    = vec3(0.055, 0.322, 0.408);  // #0e5268
-    vec3 plasma = vec3(0.404, 0.910, 0.976);  // #67E8F9
-    vec3 col = mix(deep, mid, cloud);
-    col = mix(col, plasma, pow(cloud, 3.5) * 0.5); // plasma only in dense cores
+    vec3 col = mix(uDeep, uMid, cloud);
+    col = mix(col, uAccent, pow(cloud, 3.5) * 0.5); // accent only in dense cores
 
     // fade edges so the plane never shows a border
     float edge = smoothstep(0.0, 0.25, vUv.x) * smoothstep(1.0, 0.75, vUv.x)
@@ -82,6 +83,14 @@ const fragment = /* glsl */ `
 export default function Nebula() {
   const mat = useRef();
   const reducedMotion = useStore((s) => s.reducedMotion);
+  const theme = useStore((s) => THEMES[s.theme]);
+
+  useEffect(() => {
+    if (!mat.current) return;
+    mat.current.uniforms.uDeep.value.set(...theme.nebulaDeep);
+    mat.current.uniforms.uMid.value.set(...theme.nebulaMid);
+    mat.current.uniforms.uAccent.value.set(...theme.nebulaAccent);
+  }, [theme]);
 
   useFrame((state) => {
     if (reducedMotion) return;
@@ -98,7 +107,12 @@ export default function Nebula() {
         transparent
         depthWrite={false}
         blending={THREE.AdditiveBlending}
-        uniforms={{ uTime: { value: 0 } }}
+        uniforms={{
+          uTime: { value: 0 },
+          uDeep: { value: new THREE.Vector3(0.012, 0.059, 0.094) },
+          uMid: { value: new THREE.Vector3(0.055, 0.322, 0.408) },
+          uAccent: { value: new THREE.Vector3(0.404, 0.91, 0.976) },
+        }}
       />
     </mesh>
   );

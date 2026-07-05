@@ -2,6 +2,7 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useStore } from "../../store/useStore";
+import { THEMES } from "../../lib/themes";
 
 /*
  * Procedural star field - instanced Points with a custom shader.
@@ -42,16 +43,19 @@ const fragment = /* glsl */ `
   }
 `;
 
-const PALETTE = [
-  new THREE.Color("#ffffff"),
-  new THREE.Color("#67E8F9"),
-  new THREE.Color("#F8D866"),
-];
-
 function StarLayer({ count, radius, thickness, baseScale, drift }) {
   const mat = useRef();
   const group = useRef();
   const reducedMotion = useStore((s) => s.reducedMotion);
+  const theme = useStore((s) => THEMES[s.theme]);
+  const PALETTE = useMemo(
+    () => [
+      new THREE.Color("#ffffff"),
+      new THREE.Color(theme.accent),
+      new THREE.Color(theme.gold),
+    ],
+    [theme],
+  );
 
   const { positions, scales, phases, colors } = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -73,7 +77,7 @@ function StarLayer({ count, radius, thickness, baseScale, drift }) {
       colors.set([c.r, c.g, c.b], i * 3);
     }
     return { positions, scales, phases, colors };
-  }, [count, radius, thickness, baseScale]);
+  }, [count, radius, thickness, baseScale, PALETTE]);
 
   useFrame((state) => {
     if (reducedMotion) return;

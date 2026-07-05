@@ -4,6 +4,7 @@ import Loader from './components/ui/Loader'
 import FxOverlay from './components/ui/FxOverlay'
 import SoundToggle from './components/ui/SoundToggle'
 import SectorRail from './components/ui/SectorRail'
+import ThemeToggle from './components/ui/ThemeToggle'
 import Void404 from './components/ui/Void404'
 import { Analytics } from '@vercel/analytics/react'
 import Hero from './components/sections/Hero'
@@ -41,6 +42,7 @@ export default function App() {
       <Scene eventSource={rootRef} />
       <FxOverlay />
       <SoundToggle />
+      <ThemeToggle />
       <SectorRail />
       <main>
         <Hero />

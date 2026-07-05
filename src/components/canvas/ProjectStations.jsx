@@ -4,6 +4,7 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { projects } from "../../data/projects";
 import { useStore } from "../../store/useStore";
+import { THEMES } from "../../lib/themes";
 
 /*
  * Projects = Deep Space Stations, parked along a corridor at x ≈ 34…87.
@@ -21,6 +22,7 @@ function Station({ project, position, index }) {
   const ringA = useRef();
   const wire = useRef();
   const reducedMotion = useStore((s) => s.reducedMotion);
+  const theme = useStore((s) => THEMES[s.theme]);
   const locked = project.locked;
 
   useFrame((state, delta) => {
@@ -43,7 +45,7 @@ function Station({ project, position, index }) {
           <mesh ref={wire}>
             <octahedronGeometry args={[1.4, 1]} />
             <meshBasicMaterial
-              color="#F8D866"
+              color={theme.gold}
               wireframe
               transparent
               opacity={0.35}
@@ -55,10 +57,10 @@ function Station({ project, position, index }) {
             <mesh>
               <boxGeometry args={[1.1, 1.1, 1.1]} />
               <meshStandardMaterial
-                color="#083344"
+                color={theme.mid}
                 roughness={0.5}
                 metalness={0.4}
-                emissive={new THREE.Color("#0e5268")}
+                emissive={new THREE.Color(theme.grad)}
                 emissiveIntensity={0.5}
               />
             </mesh>
@@ -66,8 +68,8 @@ function Station({ project, position, index }) {
             <mesh ref={ringA} rotation={[Math.PI / 2, 0, 0]}>
               <torusGeometry args={[1.9, 0.06, 12, 80]} />
               <meshStandardMaterial
-                color="#22D3EE"
-                emissive={new THREE.Color("#22D3EE")}
+                color={theme.accent2}
+                emissive={new THREE.Color(theme.accent2)}
                 emissiveIntensity={1.1}
                 toneMapped={false}
               />
@@ -76,15 +78,15 @@ function Station({ project, position, index }) {
             <mesh position={[0, 1.3, 0]}>
               <cylinderGeometry args={[0.03, 0.03, 1.4, 8]} />
               <meshStandardMaterial
-                color="#67E8F9"
-                emissive={new THREE.Color("#67E8F9")}
+                color={theme.accent}
+                emissive={new THREE.Color(theme.accent)}
                 emissiveIntensity={0.9}
                 toneMapped={false}
               />
             </mesh>
             <mesh position={[0, 2.05, 0]}>
               <sphereGeometry args={[0.1, 12, 12]} />
-              <meshBasicMaterial color="#F8D866" toneMapped={false} />
+              <meshBasicMaterial color={theme.gold} toneMapped={false} />
             </mesh>
           </>
         )}
