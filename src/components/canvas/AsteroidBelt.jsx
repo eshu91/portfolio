@@ -53,7 +53,7 @@ export default function AsteroidBelt({ radius, spread, thickness = 1.2, scale = 
   return (
     <instancedMesh key={count} ref={ref} args={[null, null, count]}>
       <dodecahedronGeometry args={[1, 0]} />
-      <meshStandardMaterial color="#0e5268" roughness={0.9} metalness={0.15} />
+      <meshStandardMaterial color="#ffffff" roughness={0.9} metalness={0.15} />
     </instancedMesh>
   )
 }
