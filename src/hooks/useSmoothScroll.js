@@ -17,6 +17,7 @@ export function useSmoothScroll() {
   useEffect(() => {
     if (reducedMotion) return
     const lenis = new Lenis({ lerp: 0.1, smoothWheel: true })
+    window.__lenis = lenis // used by SectorRail for click-to-fly
     lenis.on('scroll', (e) => {
       ScrollTrigger.update()
       useStore.getState().setScrollVelocity(e.velocity)
@@ -27,6 +28,7 @@ export function useSmoothScroll() {
     return () => {
       gsap.ticker.remove(raf)
       lenis.destroy()
+      delete window.__lenis
     }
   }, [reducedMotion])
 }

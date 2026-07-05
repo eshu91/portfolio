@@ -28,3 +28,20 @@ body { font-family: 'Space Grotesk', system-ui, sans-serif; overflow-x: hidden; 
     transparent 3px
   );
 }
+
+/* sector rail — active node pulse */
+@keyframes rail-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+.rail-pulse { animation: rail-pulse 1.8s ease-in-out infinite; }
+
+/* 404 starfield (pure CSS, no WebGL) */
+.void-stars {
+  background-image:
+    radial-gradient(#ffffff 1px, transparent 1px),
+    radial-gradient(rgba(103, 232, 249, 0.7) 1px, transparent 1px),
+    radial-gradient(rgba(248, 216, 102, 0.8) 1px, transparent 1px);
+  background-size: 110px 85px, 160px 120px, 240px 190px;
+  background-position: 10px 5px, 50px 70px, 100px 30px;
+}
