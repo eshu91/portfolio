@@ -44,8 +44,22 @@ export default function FxOverlay() {
     window.addEventListener('pointermove', onMove, { passive: true })
 
     let cometY = H * 0.5
+    let novaFlash = 0
+    let novaSeqSeen = useStore.getState().novaSeq
     const draw = () => {
       ctx.clearRect(0, 0, W, H)
+
+      // supernova screen flash
+      const seqNow = useStore.getState().novaSeq
+      if (seqNow !== novaSeqSeen) {
+        novaSeqSeen = seqNow
+        novaFlash = 0.5
+      }
+      if (novaFlash > 0.01) {
+        ctx.fillStyle = `rgba(${hexToRgb(theme().accent)},${novaFlash * 0.5})`
+        ctx.fillRect(0, 0, W, H)
+        novaFlash *= 0.88
+      }
 
       // cursor glow
       if (mx > 0) {

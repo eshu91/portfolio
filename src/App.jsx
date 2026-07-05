@@ -14,6 +14,7 @@ import Projects from './components/sections/Projects'
 import Roadmap from './components/sections/Roadmap'
 import Contact from './components/sections/Contact'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
+import { useNovaTrigger } from './hooks/useNovaTrigger'
 
 /*
  * Single-canvas architecture: <Scene/> fixed behind, DOM sections scroll
@@ -27,6 +28,7 @@ const notFound =
 
 export default function App() {
   useSmoothScroll()
+  useNovaTrigger()
   const rootRef = useRef(null)
   if (notFound) {
     return (
