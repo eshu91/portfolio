@@ -6,7 +6,7 @@ export const profile = {
   location: "Itahari, Nepal 🇳🇵",
   email: "ishwariraut133@gmail.com",
   tagline:
-    "Building real things across the stack - from Nepal to the cloud",
+    "Building real things across the stack - from Kathmandu to the cloud",
   roles: [
     "Full-Stack Engineer",
     "Cloud Explorer ☁️",
@@ -19,8 +19,8 @@ export const profile = {
         self.name = "Ishwari Raut"
         self.alias = "SNova"
         self.location = "Itahari, Nepal 🇳🇵"
-        self.roles = ["Full-Stack Engineer", "IT Engineer @ Everest IT",
-                      "CS Teacher", "Flutter Dev @ Quality IT Solutions"]
+        self.roles = ["Full-Stack Engineer", "Cloud Intern @ Everest IT",
+                      "CS Teacher", "ex-Flutter Dev @ Quality IT Solutions"]
         self.languages = ["नेपाली", "English", "हिन्दी", "Deutsch (learning)"]
 
     def current_focus(self):

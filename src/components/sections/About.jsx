@@ -38,7 +38,7 @@ export default function About() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.7 }}
-        className="scanlines relative w-full max-w-2xl rounded-xl border border-plasma-mid/40 bg-space-deep/75 shadow-[0_0_40px_rgba(34,211,238,0.18)] backdrop-blur-md overflow-hidden"
+        className="scanlines relative w-full max-w-2xl rounded-xl border border-plasma-mid/40 bg-space-deep/75 shadow-[0_0_40px_rgb(var(--accent2)/0.18)] backdrop-blur-md overflow-hidden"
       >
         {/* HUD title bar */}
         <div className="flex items-center gap-2 border-b border-space-grad/70 bg-space-mid/50 px-4 py-2.5 font-code text-xs">

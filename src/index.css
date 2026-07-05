@@ -2,9 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body { background: #030f18; color: #ffffff; }
+/* ── theme variables (space-separated RGB for rgb(var()/alpha)) ──
+   Plasma Cyan is the default; Cyberpunk Void overrides via data-theme.
+   Adding a theme = one block here + one object in src/lib/themes.js. */
+:root {
+  --deep: 3 15 24;        /* #030f18 */
+  --mid: 8 51 68;         /* #083344 */
+  --grad: 14 82 104;      /* #0e5268 */
+  --accent: 103 232 249;  /* #67E8F9 */
+  --accent2: 34 211 238;  /* #22D3EE */
+  --gold: 248 216 102;    /* #F8D866 */
+}
+[data-theme='void'] {
+  --deep: 2 0 20;         /* #020014 */
+  --mid: 10 1 24;         /* #0a0118 */
+  --grad: 59 15 102;      /* #3b0f66 */
+  --accent: 0 255 247;    /* #00FFF7 */
+  --accent2: 255 16 240;  /* #FF10F0 */
+  --gold: 255 182 39;     /* #FFB627 */
+}
+
+html, body { background: rgb(var(--deep)); color: #ffffff; transition: background 0.5s ease; }
 body { font-family: 'Space Grotesk', system-ui, sans-serif; overflow-x: hidden; }
-::selection { background: #22D3EE; color: #030f18; }
+::selection { background: rgb(var(--accent2)); color: rgb(var(--deep)); }
 
 /* the single shared WebGL canvas sits behind all DOM content */
 .webgl-canvas { position: fixed !important; inset: 0; z-index: 0; pointer-events: none; }
@@ -22,9 +42,60 @@ body { font-family: 'Space Grotesk', system-ui, sans-serif; overflow-x: hidden; 
   pointer-events: none;
   background: repeating-linear-gradient(
     0deg,
-    rgba(103, 232, 249, 0.045) 0px,
-    rgba(103, 232, 249, 0.045) 1px,
+    rgb(var(--accent) / 0.045) 0px,
+    rgb(var(--accent) / 0.045) 1px,
     transparent 1px,
     transparent 3px
   );
+}
+
+/* sector rail — active node pulse */
+@keyframes rail-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+.rail-pulse { animation: rail-pulse 1.8s ease-in-out infinite; }
+
+/* 404 starfield (pure CSS, no WebGL) */
+.void-stars {
+  background-image:
+    radial-gradient(#ffffff 1px, transparent 1px),
+    radial-gradient(rgb(var(--accent) / 0.7) 1px, transparent 1px),
+    radial-gradient(rgb(var(--gold) / 0.8) 1px, transparent 1px);
+  background-size: 110px 85px, 160px 120px, 240px 190px;
+  background-position: 10px 5px, 50px 70px, 100px 30px;
+}
+
+/* keyboard-focusable planet controls: invisible until :focus-visible,
+   then a HUD chip pinned bottom-left (mirrors the sound/theme corner) */
+.planet-key {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.planet-key:focus-visible {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 60;
+  width: auto;
+  height: auto;
+  clip: auto;
+  overflow: visible;
+  white-space: normal;
+  max-width: 22rem;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  padding: 0.6rem 0.9rem;
+  border-radius: 0.5rem;
+  color: rgb(var(--accent));
+  background: rgb(var(--deep) / 0.92);
+  border: 1px solid rgb(var(--accent) / 0.6);
+  box-shadow: 0 0 18px rgb(var(--accent) / 0.3);
+  outline: none;
 }

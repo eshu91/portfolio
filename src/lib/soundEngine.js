@@ -145,6 +145,30 @@ function tone({ freq = 880, end = null, type = 'sine', dur = 0.15, vol = 0.2, de
   o.stop(t0 + dur + 0.05)
 }
 
+/** one-shot filtered noise burst (the 'explosion' body of the supernova) */
+function noiseBurst({ dur = 0.9, from = 4500, to = 120, vol = 0.4, delay = 0 }) {
+  if (!ctx || !started) return
+  const t0 = ctx.currentTime + delay
+  const len = Math.ceil(ctx.sampleRate * dur)
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate)
+  const d = buf.getChannelData(0)
+  for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1
+  const src = ctx.createBufferSource()
+  src.buffer = buf
+  const f = ctx.createBiquadFilter()
+  f.type = 'lowpass'
+  f.frequency.setValueAtTime(from, t0)
+  f.frequency.exponentialRampToValueAtTime(to, t0 + dur)
+  const g = ctx.createGain()
+  g.gain.setValueAtTime(vol, t0)
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur)
+  src.connect(f)
+  f.connect(g)
+  g.connect(master)
+  src.start(t0)
+  src.stop(t0 + dur)
+}
+
 export const sfx = {
   hover:    () => tone({ freq: 1200, end: 1500, dur: 0.08, vol: 0.05 }),
   click:    () => tone({ freq: 900, end: 700, dur: 0.07, vol: 0.08 }),
@@ -156,4 +180,12 @@ export const sfx = {
   transmit: () => [660, 880, 1320].forEach((f, i) =>
     tone({ freq: f, end: f * 1.12, dur: 0.14, vol: 0.09, delay: i * 0.09 })
   ),
+  /** the big one: noise blast + sub-bass drop + rising shimmer */
+  supernova: () => {
+    noiseBurst({ dur: 1.0, from: 5000, to: 100, vol: 0.38 })
+    tone({ freq: 150, end: 32, type: 'sine', dur: 1.1, vol: 0.28 })
+    ;[880, 1320, 1760, 2640].forEach((f, i) =>
+      tone({ freq: f, end: f * 1.05, dur: 0.3, vol: 0.045, delay: 0.15 + i * 0.07 })
+    )
+  },
 }

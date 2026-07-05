@@ -4,6 +4,7 @@ import { Html, Line } from "@react-three/drei";
 import * as THREE from "three";
 import { roadmap } from "../../data/roadmap";
 import { useStore } from "../../store/useStore";
+import { THEMES } from "../../lib/themes";
 
 /*
  * Roadmap = constellation Trajectory Map, floating below the solar plane.
@@ -13,17 +14,18 @@ import { useStore } from "../../store/useStore";
  */
 const CENTER_Y = -43;
 
-function statusColor(status) {
+function statusColor(theme, status) {
   return status === "done"
-    ? "#67E8F9"
+    ? theme.accent
     : status === "current"
-      ? "#F8D866"
-      : "#0e5268";
+      ? theme.gold
+      : theme.grad;
 }
 
 function MilestoneStar({ point, item }) {
   const mesh = useRef();
   const reducedMotion = useStore((s) => s.reducedMotion);
+  const theme = useStore((s) => THEMES[s.theme]);
   const current = item?.status === "current";
 
   useFrame((state) => {
@@ -35,7 +37,7 @@ function MilestoneStar({ point, item }) {
     }
   });
 
-  const color = item ? statusColor(item.status) : "#0e5268";
+  const color = item ? statusColor(theme, item.status) : theme.grad;
   return (
     <group position={point}>
       <mesh ref={mesh}>
@@ -77,6 +79,7 @@ function MilestoneStar({ point, item }) {
 }
 
 export default function TrajectoryMap() {
+  const theme = useStore((s) => THEMES[s.theme]);
   const points = useMemo(() => {
     const n = roadmap.length + 2; // +2 dim placeholder stars
     return Array.from({ length: n }, (_, i) => [
@@ -90,7 +93,7 @@ export default function TrajectoryMap() {
     <group>
       <Line
         points={points}
-        color="#22D3EE"
+        color={theme.accent2}
         lineWidth={1}
         transparent
         opacity={0.5}
