@@ -1,6 +1,6 @@
 /**
  * Skills = Solar System.
- * Each entry is a PLANET orbiting the SNova star; `moons` are the frameworks -
+ * Each entry is a PLANET orbiting the SNova star; `moons` are the frameworks —
  * their order IS the dependency chain (language → framework → tools), rendered
  * as visible connection arcs.
  *
@@ -8,7 +8,7 @@
  *   { id: 'go', label: 'Go', color: '#67E8F9', texture: '/textures/mars.png',
  *     orbitRadius: 30, size: 1.1,
  *     speed: 0.1, level: 'Learning', moons: ['Gin', 'gRPC'] }
- * Append it below - orbit, hover card and fallback grid all pick it up.
+ * Append it below — orbit, hover card and fallback grid all pick it up.
  */
 export const skills = [
   {
@@ -16,8 +16,8 @@ export const skills = [
     texture: "/textures/mercury.jpg",
     label: "PHP",
     color: "#67E8F9",
-    orbitRadius: 10,
-    size: 0.7,
+    orbitRadius: 13,
+    size: 0.65,
     speed: 0.22,
     level: "Advanced",
     moons: ["Laravel"],
@@ -27,8 +27,8 @@ export const skills = [
     texture: "/textures/venus.jpg",
     label: "Python",
     color: "#F8D866",
-    orbitRadius: 13.5,
-    size: 0.85,
+    orbitRadius: 15,
+    size: 0.7,
     speed: 0.18,
     level: "Advanced",
     moons: ["Django", "Flask", "NumPy"],
@@ -38,8 +38,8 @@ export const skills = [
     texture: "/textures/earth.jpg",
     label: "JavaScript",
     color: "#22D3EE",
-    orbitRadius: 17,
-    size: 1.5,
+    orbitRadius: 18,
+    size: 1.1,
     speed: 0.15,
     level: "Advanced",
     moons: ["Node", "React", "TypeScript", "Next.js"],
@@ -49,8 +49,8 @@ export const skills = [
     texture: "/textures/mars.png",
     label: "Dart",
     color: "#67E8F9",
-    orbitRadius: 20.5,
-    size: 0.9,
+    orbitRadius: 21,
+    size: 0.75,
     speed: 0.13,
     level: "Advanced",
     moons: ["Flutter", "Android", "Firebase"],
@@ -60,7 +60,7 @@ export const skills = [
     texture: "/textures/jupiter.png",
     label: "C# / Java / C",
     color: "#F8D866",
-    orbitRadius: 24,
+    orbitRadius: 27,
     size: 1.2,
     speed: 0.11,
     level: "Intermediate",
@@ -71,7 +71,7 @@ export const skills = [
     texture: "/textures/saturn.jpg",
     label: "HTML + CSS",
     color: "#22D3EE",
-    orbitRadius: 27,
+    orbitRadius: 30,
     size: 1.0,
     speed: 0.1,
     level: "Advanced",
@@ -82,7 +82,7 @@ export const skills = [
     texture: "/textures/uranus.jpg",
     label: "Databases",
     color: "#67E8F9",
-    orbitRadius: 30.5,
+    orbitRadius: 33.5,
     size: 1.6,
     speed: 0.085,
     level: "Advanced",
@@ -101,7 +101,7 @@ export const skills = [
     texture: "/textures/neptune.png",
     label: "Cloud",
     color: "#F8D866",
-    orbitRadius: 34,
+    orbitRadius: 37,
     size: 1.5,
     speed: 0.07,
     level: "Growing · AZ-900 → AZ-104",
@@ -109,20 +109,29 @@ export const skills = [
   },
 ];
 
-/** Tools asteroid belt - small instanced rocks between the outer orbits. */
-export const asteroidBelt = {
-  radius: 38,
-  spread: 2.5,
-  tools: [
-    "Git",
-    "Linux",
-    "Figma",
-    "Arduino",
-    "Unity",
-    "MATLAB",
-    "OpenCV",
-    "Chart.js",
-    "CanvasJS",
-    "Photoshop",
-  ],
-};
+/**
+ * Asteroid belts — proportionally distributed rock rings.
+ *   inner: the main belt, between the rocky planets and the gas giants
+ *          (dev tools — the rocks you build with)
+ *   outer: Kuiper-style ring beyond the last orbit (viz / science / design)
+ * Rock count auto-scales with each belt's circumference, so visual density
+ * stays even. Add a belt = append one object.
+ */
+export const asteroidBelts = [
+  {
+    id: "inner",
+    label: "Dev Tools Belt",
+    radius: 22.25,
+    spread: 1.5,
+    thickness: 1.5,
+    tools: ["Git", "Linux", "Figma", "Arduino", "Unity"],
+  },
+  {
+    id: "outer",
+    label: "Viz & Science Belt",
+    radius: 41,
+    spread: 2.5,
+    thickness: 1.5,
+    tools: ["MATLAB", "OpenCV", "Chart.js", "CanvasJS", "Photoshop"],
+  },
+];

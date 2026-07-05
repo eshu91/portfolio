@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { useTexture } from '@react-three/drei'
-import { skills, asteroidBelt } from '../../data/skills'
+import { skills, asteroidBelts } from '../../data/skills'
 import SkillPlanet from './SkillPlanet'
 import AsteroidBelt from './AsteroidBelt'
 
@@ -10,7 +10,7 @@ import AsteroidBelt from './AsteroidBelt'
  * ring, planet, moons and chain arcs automatically.
  * SCALE compresses the semantic orbit radii (10–38) into camera frame.
  */
-const SCALE = 0.55
+const SCALE = 0.65
 
 // preload every surface map (+ shared moon map) during the loader screen
 skills.forEach((s) => useTexture.preload(s.texture))
@@ -29,7 +29,9 @@ export default function SolarSystem() {
           <SkillPlanet skill={skill} scale={SCALE} />
         </group>
       ))}
-      <AsteroidBelt radius={asteroidBelt.radius} spread={asteroidBelt.spread} scale={SCALE} />
+      {asteroidBelts.map((b) => (
+        <AsteroidBelt key={b.id} radius={b.radius} spread={b.spread} thickness={b.thickness} scale={SCALE} />
+      ))}
     </group>
   )
 }
