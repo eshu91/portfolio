@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import Scene from './components/canvas/Scene'
 import Loader from './components/ui/Loader'
 import FxOverlay from './components/ui/FxOverlay'
+import SoundToggle from './components/ui/SoundToggle'
 import Hero from './components/sections/Hero'
 import About from './components/sections/About'
 import Skills from './components/sections/Skills'
@@ -24,6 +25,7 @@ export default function App() {
       <Loader />
       <Scene eventSource={rootRef} />
       <FxOverlay />
+      <SoundToggle />
       <main>
         <Hero />
         <About />
