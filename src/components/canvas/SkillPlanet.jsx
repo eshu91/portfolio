@@ -4,6 +4,7 @@ import { Html, QuadraticBezierLine, useTexture } from '@react-three/drei'
 import * as THREE from 'three'
 import { useStore } from '../../store/useStore'
 import { skillPositions } from './skillRegistry'
+import { sfx } from '../../lib/soundEngine'
 
 /*
  * One tech-ecosystem planet, fully prop-driven from data/skills.js.
@@ -77,6 +78,7 @@ export default function SkillPlanet({ skill, scale = 1 }) {
             onPointerOver={(e) => {
               e.stopPropagation()
               setHoveredSkill(id)
+              sfx.hover()
               document.body.style.cursor = 'pointer'
             }}
             onPointerOut={() => {
@@ -85,6 +87,7 @@ export default function SkillPlanet({ skill, scale = 1 }) {
             }}
             onClick={(e) => {
               e.stopPropagation()
+              focused ? sfx.release() : sfx.dock()
               setFocusedSkill(focused ? null : id) // click again to release
             }}
           >

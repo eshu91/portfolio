@@ -1,20 +1,18 @@
-import { motion } from "framer-motion";
-import { profile } from "../../data/profile";
-import { useTyping } from "../../hooks/useTyping";
-import Magnetic from "../ui/Magnetic";
+import { motion } from 'framer-motion'
+import { profile } from '../../data/profile'
+import { useTyping } from '../../hooks/useTyping'
+import Magnetic from '../ui/Magnetic'
+import { sfx } from '../../lib/soundEngine'
 
 /*
- * Launch sector - the DOM layer floating over the SNova scene.
+ * Launch sector — the DOM layer floating over the SNova scene.
  * All copy comes from data/profile.js.
  */
 export default function Hero() {
-  const typed = useTyping(profile.roles);
+  const typed = useTyping(profile.roles)
 
   return (
-    <section
-      id="hero"
-      className="dom-layer min-h-screen flex flex-col items-center justify-center text-center px-6"
-    >
+    <section id="hero" className="dom-layer min-h-screen flex flex-col items-center justify-center text-center px-6">
       <motion.p
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -33,12 +31,8 @@ export default function Hero() {
         {profile.alias}
       </motion.h1>
 
-      <p
-        className="font-code text-plasma mt-4 h-6 text-sm md:text-base"
-        aria-live="polite"
-      >
-        {typed}
-        <span className="text-stargold animate-pulse">▌</span>
+      <p className="font-code text-plasma mt-4 h-6 text-sm md:text-base" aria-live="polite">
+        {typed}<span className="text-stargold animate-pulse">▌</span>
       </p>
 
       <motion.p
@@ -56,23 +50,21 @@ export default function Hero() {
         transition={{ delay: 0.9 }}
         className="flex flex-wrap justify-center gap-3 mt-8"
       >
-        <Magnetic>
-          <a
-            href="#skills"
-            className="font-code text-[11px] px-5 py-2.5 rounded-full border border-plasma-mid text-plasma hover:bg-space-mid hover:shadow-[0_0_20px_rgba(34,211,238,0.45)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-plasma"
-          >
-            Explore my universe
-          </a>
-        </Magnetic>
-        <Magnetic>
-          <a
-            href="/resume.pdf"
-            className="font-code text-[11px] px-5 py-2.5 rounded-full border border-space-grad text-white/70 hover:text-plasma hover:border-plasma-mid transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-plasma"
-          >
-            Download résumé
-          </a>
-        </Magnetic>
+        <Magnetic><a
+          onClick={() => sfx.click()}
+          href="#skills"
+          className="font-code text-[11px] px-5 py-2.5 rounded-full border border-plasma-mid text-plasma hover:bg-space-mid hover:shadow-[0_0_20px_rgba(34,211,238,0.45)] transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-plasma"
+        >
+          Explore my universe
+        </a></Magnetic>
+        <Magnetic><a
+          onClick={() => sfx.click()}
+          href="/resume.pdf"
+          className="font-code text-[11px] px-5 py-2.5 rounded-full border border-space-grad text-white/70 hover:text-plasma hover:border-plasma-mid transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-plasma"
+        >
+          Download résumé
+        </a></Magnetic>
       </motion.div>
     </section>
-  );
+  )
 }
